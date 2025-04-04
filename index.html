@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JusticeHub - AI-Powered Legal Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #5a7cff;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --accent-light: #6bd7f8;
+            --dark: #212529;
+            --darker: #12141a;
+            --light: #f8f9fa;
+            --lighter: #ffffff;
+            --success: #4ad66d;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-effect: rgba(255, 255, 255, 0.15);
+            --text-primary: #2b2d42;
+            --text-secondary: #6c757d;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header with glass morphism effect */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 1.2rem 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background: rgba(67, 97, 238, 0.95);
+            box-shadow: var(--shadow-md);
+            padding: 0.8rem 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 1.8rem;
+            transition: var(--transition);
+        }
+
+        .logo span {
+            position: relative;
+        }
+
+        .logo span::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .logo:hover span::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        header.scrolled .logo {
+            color: white;
+        }
+
+        header.scrolled .logo i {
+            color: white;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav ul li a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        header.scrolled nav ul li a {
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        header.scrolled .mobile-menu-btn {
+            color: white;
+        }
+
+        /* Hero section with parallax background */
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+            background: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.9) 0%, rgba(63, 55, 201, 0.9) 100%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+            max-width: 600px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: var(--lighter);
+            color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            background: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--lighter);
+            border: 2px solid var(--lighter);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-outline:hover {
+            background: var(--lighter);
+            color: var(--primary);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* Features section with background pattern */
+        .features {
+            padding: 8rem 0;
+            background: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h100v100H0z" fill="none"/><path d="M50 0v100M0 50h100" stroke="rgba(67, 97, 238, 0.05)" stroke-width="1"/></svg>') repeat;
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0.95;
+            z-index: 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(76, 201, 240, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-icon i {
+            position: relative;
+            z-index: 1;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon i {
+            transform: scale(1.2);
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon::before {
+            transform: scale(1.5);
+            opacity: 0.5;
+        }
+
+        .feature-content {
+            padding: 2.5rem;
+        }
+
+        .feature-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .feature-link i {
+            margin-left: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: var(--secondary);
+        }
+
+        .feature-link:hover i {
+            transform: translateX(8px);
+        }
+
+        /* Floating elements animation */
+        .floating {
+            animation: floating 8s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Legal Aid Section with background image */
+        .legal-aid-section {
+            padding: 8rem 0;
+            background: url('https://images.unsplash.com/photo-1589391886645-d51941baf7fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .legal-aid-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(67, 97, 238, 0.9);
+            z-index: 0;
+        }
+
+        .legal-aid-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .legal-aid-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.1) 0%, rgba(76, 201, 240, 0) 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .legal-aid-header {
+            padding: 3rem;
+            background: var(--primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .legal-aid-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.2;
+        }
+
+        .legal-aid-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .legal-aid-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+        }
+
+        .legal-aid-form {
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            appearance: none;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(76, 201, 240, 0.2);
+            background: white;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 1.5rem;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-secondary);
+        }
+
+        .search-btn {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-results {
+            padding: 3rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h3 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+        }
+
+        .results-count {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .lawyers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .lawyer-card {
+            display: flex;
+            padding: 2rem;
+            border-radius: 15px;
+            transition: var(--transition);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lawyer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .lawyer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: #e2e8f0;
+        }
+
+        .lawyer-card:hover::before {
+            width: 8px;
+            background: var(--accent);
+        }
+
+        .lawyer-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 2.2rem;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .lawyer-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .lawyer-info {
+            flex: 1;
+        }
+
+        .lawyer-info h4 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .lawyer-specialty {
+            display: inline-block;
+            background: #f1f5f9;
+            color: var(--text-primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .lawyer-rating {
+            color: #f59e0b;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .lawyer-rating span {
+            color: var(--text-secondary);
+            margin-left: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .lawyer-contact {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .contact-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .profile-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .message-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .message-btn:hover {
+            background: rgba(67, 97, 238, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* AI Case Analyzer Section with background */
+        .case-analyzer-section {
+            padding: 8rem 0;
+            background: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        .case-analyzer-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 0;
+        }
+
+        .chatbot-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            height: 700px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .chatbot-header {
+            padding: 1.8rem;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .chatbot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .chatbot-status {
+            margin-left: auto;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+            margin-right: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .chatbot-body {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 1.5rem;
+            border-radius: 20px;
+            animation: fadeIn 0.4s ease;
+            position: relative;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: white;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+            border-top-left-radius: 5px;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-top-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 0.8rem;
+            display: block;
+            text-align: right;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+            position: relative;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .chatbot-input input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(76, 201, 240, 0.2);
+        }
+
+        .send-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            margin-left: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .send-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Education Library Section with background */
+        .library-section {
+            padding: 8rem 0;
+            background: url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        .library-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(248, 250, 252, 0.95);
+            z-index: 0;
+        }
+
+        .library-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .library-header {
+            padding: 3rem;
+            background: var(--primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .library-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.2;
+        }
+
+        .library-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .library-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+        }
+
+        .library-search {
+            padding: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 4rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            background: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(76, 201, 240, 0.2);
+            background: white;
+        }
+
+        .library-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            padding: 1.5rem 2rem;
+            background: #f1f5f9;
+        }
+
+        .category-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .library-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+        }
+
+        .library-sidebar {
+            padding: 2rem;
+            border-right: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .library-sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -1px;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
+        }
+
+        .sidebar-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .sidebar-section h4 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-section h4 i {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+        }
+
+        .sidebar-menu a:hover {
+            color: var(--primary);
+            padding-left: 0.5rem;
+        }
+
+        .sidebar-menu a i {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover i {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .library-main {
+            padding: 2rem;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .document-card {
+            padding: 2rem;
+            border-radius: 15px;
+            transition: var(--transition);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .document-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: #e2e8f0;
+        }
+
+        .document-card:hover::before {
+            width: 8px;
+            background: var(--accent);
+        }
+
+        .document-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+
+        .document-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .document-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meta-item i {
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .view-btn:hover {
+            color: white;
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .view-btn i {
+            transition: var(--transition);
+        }
+
+        .view-btn:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 6rem 0;
+            background: var(--primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.2;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Testimonials Section with background */
+        .testimonials-section {
+            padding: 8rem 0;
+            background: url('https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+            background-size: cover;
+            position: relative;
+        }
+
+        .testimonials-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 0;
+        }
+
+        .testimonials-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin: 1rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-size: 8rem;
+            font-family: 'Playfair Display', serif;
+            color: rgba(67, 97, 238, 0.1);
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 1.5rem;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+
+        .author-info h5 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section with gradient background */
+        .cta-section {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-container h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-container p {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 1.2rem;
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 6rem 0 3rem;
+            position: relative;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-column p {
+            color: #adb5bd;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul li a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+            padding-left: 0.5rem;
+        }
+
+        .footer-column ul li a i {
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .social-icon:hover {
+            background: var(--accent);
+            color: var(--darker);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #adb5bd;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-bottom p {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Floating shapes decoration */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 10%;
+            left: 5%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            bottom: 10%;
+            right: 5%;
+            animation: float 18s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, 50px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+           
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .library-content {
+                grid-template-columns: 1fr;
+            }
+           
+            .library-sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 700px;
+            }
+           
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+           
+            .hero p {
+                font-size: 1.1rem;
+            }
+           
+            .hero-btns {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+           
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+           
+            .mobile-menu-btn {
+                display: block;
+            }
+           
+            nav {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 2rem;
+                box-shadow: var(--shadow-lg);
+                transform: translateY(-150%);
+                transition: var(--transition);
+                z-index: 999;
+            }
+           
+            nav.active {
+                transform: translateY(0);
+            }
+           
+            nav ul {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+           
+            header.scrolled nav {
+                top: 70px;
+            }
+           
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+           
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+           
+            .lawyers-grid, .documents-grid {
+                grid-template-columns: 1fr;
+            }
+           
+            .cta-container h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+           
+            .section-title h2 {
+                font-size: 2rem;
+            }
+           
+            .lawyer-card {
+                flex-direction: column;
+                text-align: center;
+            }
+           
+            .lawyer-avatar {
+                margin-right: 0;
+                margin-bottom: 1.5rem;
+            }
+           
+            .lawyer-contact {
+                flex-direction: column;
+                gap: 1rem;
+            }
+           
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+           
+            .chatbot-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+           
+            .chatbot-avatar {
+                margin-right: 0;
+            }
+           
+            .chatbot-status {
+                margin-left: 0;
+            }
+           
+            .cta-container h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>JusticeHub</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav id="nav">
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#legal-aid">Legal Aid</a></li>
+                        <li><a href="#case-analyzer">Case Analyzer</a></li>
+                        <li><a href="#library">Law Library</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Parallax Background -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Revolutionizing Legal Access in India</h1>
+                <p>JusticeHub combines AI technology with legal expertise to provide affordable, accessible justice solutions for every citizen.</p>
+                <div class="hero-btns">
+                    <a href="#legal-aid" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Find a Lawyer
+                    </a>
+                    <a href="#case-analyzer" class="btn btn-outline">
+                        <i class="fas fa-robot"></i> Analyze Your Case
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-down" id="scrollDown">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose JusticeHub?</h2>
+                <p>We combine cutting-edge technology with legal expertise to democratize access to justice in India</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card floating" style="animation-delay: 0.1s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Legal Aid Locator</h3>
+                        <p>Our intelligent matching system connects you with verified lawyers in your city, specialized in your specific legal needs with detailed profiles, ratings, and reviews.</p>
+                        <a href="#legal-aid" class="feature-link">
+                            Find Legal Help
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-card floating" style="animation-delay: 0.3s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>AI Case Prediction</h3>
+                        <p>Leveraging thousands of past cases from Indian courts, our AI provides insights into possible outcomes, timelines, and optimal legal strategies for your situation.</p>
+                        <a href="#case-analyzer" class="feature-link">
+                            Analyze Your Case
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-card floating" style="animation-delay: 0.5s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Legal Education Library</h3>
+                        <p>Comprehensive, easy-to-understand resources covering all aspects of Indian law, updated with the latest amendments and landmark judgments.</p>
+                        <a href="#library" class="feature-link">
+                            Explore Resources
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="lawyersCount">0</div>
+                    <div class="stat-label">Verified Lawyers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="casesAnalyzed">0</div>
+                    <div class="stat-label">Cases Analyzed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="successRate">0%</div>
+                    <div class="stat-label">Prediction Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="usersServed">0</div>
+                    <div class="stat-label">Users Served</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal Aid Section -->
+    <section class="legal-aid-section" id="legal-aid">
+        <div class="container">
+            <div class="legal-aid-container">
+                <div class="legal-aid-header">
+                    <h2>Find the Right Lawyer</h2>
+                    <p>Connect with experienced legal professionals in your city across all major practice areas</p>
+                </div>
+                <form class="legal-aid-form" id="lawyerSearchForm">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                       <div class="select-wrapper">
+    <select id="city" class="form-control" required>
+        <option value="">Select your city</option>
+        <option value="delhi">Delhi</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="bangalore">Bangalore</option>
+        <option value="hyderabad">Hyderabad</option>
+        <option value="chennai">Chennai</option>
+        <option value="kolkata">Kolkata</option>
+        <option value="jabalpur">Jabalpur</option>
+        <option value="indore">Indore</option>
+        <option value="dewas">Dewas</option>
+        <option value="ujjain">Ujjain</option>
+        <option value="gwalior">Gwalior</option>
+        <option value="pune">Pune</option>
+        <option value="ahmedabad">Ahmedabad</option>
+        <option value="surat">Surat</option>
+        <option value="jaipur">Jaipur</option>
+        <option value="lucknow">Lucknow</option>
+        <option value="kanpur">Kanpur</option>
+        <option value="nagpur">Nagpur</option>
+        <option value="visakhapatnam">Visakhapatnam</option>
+        <option value="thane">Thane</option>
+        <option value="bhopal">Bhopal</option>
+        <option value="pimpri-chinchwad">Pimpri-Chinchwad</option>
+        <option value="patna">Patna</option>
+        <option value="vadodara">Vadodara</option>
+        <option value="ludhiana">Ludhiana</option>
+        <option value="agra">Agra</option>
+        <option value="nashik">Nashik</option>
+        <option value="faridabad">Faridabad</option>
+        <option value="meerut">Meerut</option>
+        <option value="rajkot">Rajkot</option>
+        <option value="kalyan-dombivli">Kalyan-Dombivli</option>
+        <option value="vasai-virar">Vasai-Virar</option>
+        <option value="varanasi">Varanasi</option>
+        <option value="srinagar">Srinagar</option>
+        <option value="aurangabad">Aurangabad</option>
+        <option value="dhanbad">Dhanbad</option>
+        <option value="amritsar">Amritsar</option>
+        <option value="navi-mumbai">Navi Mumbai</option>
+        <option value="allahabad">Allahabad</option>
+        <option value="ranchi">Ranchi</option>
+        <option value="howrah">Howrah</option>
+        <option value="coimbatore">Coimbatore</option>
+        <option value="jodhpur">Jodhpur</option>
+        <option value="madurai">Madurai</option>
+        <option value="raipur">Raipur</option>
+        <option value="chandigarh">Chandigarh</option>
+        <option value="guwahati">Guwahati</option>
+        <option value="solapur">Solapur</option>
+        <option value="hubli-dharwad">Hubli-Dharwad</option>
+        <option value="mysore">Mysore</option>
+        <option value="tiruchirappalli">Tiruchirappalli</option>
+        <option value="bhubaneswar">Bhubaneswar</option>
+        <option value="salem">Salem</option>
+        <option value="bhiwandi">Bhiwandi</option>
+        <option value="saharanpur">Saharanpur</option>
+        <option value="gorakhpur">Gorakhpur</option>
+        <option value="guntur">Guntur</option>
+        <option value="bikaner">Bikaner</option>
+        <option value="amravati">Amravati</option>
+        <option value="noida">Noida</option>
+        <option value="jamshedpur">Jamshedpur</option>
+        <option value="bhilai">Bhilai</option>
+        <option value="cuttack">Cuttack</option>
+        <option value="kochi">Kochi</option>
+        <option value="dehradun">Dehradun</option>
+        <option value="kolhapur">Kolhapur</option>
+        <option value="mangalore">Mangalore</option>
+        <option value="rajahmundry">Rajahmundry</option>
+        <option value="bokaro">Bokaro</option>
+        <option value="tirupati">Tirupati</option>
+        <option value="pondicherry">Pondicherry</option>
+        <option value="jammu">Jammu</option>
+        <option value="belgaum">Belgaum</option>
+        <option value="shimla">Shimla</option>
+        <option value="patiala">Patiala</option>
+        <option value="katni">Katni</option>
+        <option value="ratlam">Ratlam</option>
+        <option value="satna">Satna</option>
+        <option value="rewa">Rewa</option>
+        <option value="sagar">Sagar</option>
+        <option value="chhindwara">Chhindwara</option>
+        <option value="burhanpur">Burhanpur</option>
+        <option value="khandwa">Khandwa</option>
+        <option value="neemuch">Neemuch</option>
+        <option value="mandsaur">Mandsaur</option>
+        <option value="guna">Guna</option>
+        <option value="shivpuri">Shivpuri</option>
+        <option value="vidisha">Vidisha</option>
+        <option value="rajgarh">Rajgarh</option>
+        <option value="sehore">Sehore</option>
+        <option value="harda">Harda</option>
+        <option value="betul">Betul</option>
+        <option value="hoshangabad">Hoshangabad</option>
+        <option value="nellore">Nellore</option>
+        <option value="kakinada">Kakinada</option>
+        <option value="eluru">Eluru</option>
+        <option value="kurnool">Kurnool</option>
+        <option value="anantapur">Anantapur</option>
+        <option value="kadapa">Kadapa</option>
+        <option value="rajapalayam">Rajapalayam</option>
+        <option value="sivakasi">Sivakasi</option>
+        <option value="tirunelveli">Tirunelveli</option>
+        <option value="thoothukudi">Thoothukudi</option>
+        <option value="nagercoil">Nagercoil</option>
+        <option value="vellore">Vellore</option>
+        <option value="erode">Erode</option>
+        <option value="tiruppur">Tiruppur</option>
+        <option value="dindigul">Dindigul</option>
+        <option value="karur">Karur</option>
+        <option value="thanjavur">Thanjavur</option>
+        <option value="kumbakonam">Kumbakonam</option>
+        <option value="nagapattinam">Nagapattinam</option>
+        <option value="karaikudi">Karaikudi</option>
+        <option value="pudukkottai">Pudukkottai</option>
+        <option value="ramanathapuram">Ramanathapuram</option>
+        <option value="theni">Theni</option>
+        <option value="virudhunagar">Virudhunagar</option>
+        <option value="arani">Arani</option>
+        <option value="chengalpattu">Chengalpattu</option>
+        <option value="kallakurichi">Kallakurichi</option>
+        <option value="ranipet">Ranipet</option>
+        <option value="tirupattur">Tirupattur</option>
+        <option value="viluppuram">Viluppuram</option>
+        <option value="ariyalur">Ariyalur</option>
+        <option value="perambalur">Perambalur</option>
+        <option value="mayiladuthurai">Mayiladuthurai</option>
+        <option value="tiruvallur">Tiruvallur</option>
+        <option value="kanyakumari">Kanyakumari</option>
+    </select>
+</div>
+                    <div class="form-group">
+                        <label for="practice-area">Practice Area</label>
+                     <div class="select-wrapper">
+    <select id="practice-area" class="form-control" required>
+        <option value="">Select practice area</option>
+        <option value="criminal">Criminal Law</option>
+        <option value="family">Family Law</option>
+        <option value="corporate">Corporate Law</option>
+        <option value="property">Property Law</option>
+        <option value="cyber">Cyber Law</option>
+        <option value="labor">Labor Law</option>
+        <option value="tax">Tax Law</option>
+        <option value="consumer">Consumer Law</option>
+        <option value="environment">Environmental Law</option>
+        <option value="arbitration">Arbitration</option>
+        <option value="contract">Contract Law</option>
+        <option value="medical">Medical Negligence</option>
+        <option value="insurance">Insurance Law</option>
+        <option value="realestate">Real Estate Law</option>
+        <option value="familybusiness">Family Business Law</option>
+        <option value="banking">Banking Law</option>
+        <option value="defamation">Defamation Law</option>
+        <option value="administrative">Administrative Law</option>
+        <option value="aviation">Aviation Law</option>
+        <option value="entertainment">Entertainment Law</option>
+        <option value="immigration">Immigration Law</option>
+        <option value="intellectual">Intellectual Property Law</option>
+        <option value="maritime">Maritime Law</option>
+        <option value="mining">Mining Law</option>
+        <option value="sports">Sports Law</option>
+        <option value="telecom">Telecommunications Law</option>
+        <option value="trust">Trust Law</option>
+        <option value="wills">Wills and Estates Law</option>
+        <option value="adr">Alternative Dispute Resolution</option>
+        <option value="constitutional">Constitutional Law</option>
+        <option value="customs">Customs Law</option>
+        <option value="education">Education Law</option>
+        <option value="food">Food Law</option>
+        <option value="health">Health Law</option>
+        <option value="it">Information Technology Law</option>
+        <option value="international">International Law</option>
+        <option value="media">Media Law</option>
+        <option value="pharmaceutical">Pharmaceutical Law</option>
+        <option value="pil">Public Interest Litigation</option>
+        <option value="securities">Securities Law</option>
+        <option value="shipping">Shipping Law</option>
+        <option value="space">Space Law</option>
+        <option value="tourism">Tourism Law</option>
+        <option value="water">Water Law</option>
+        <option value="wildlife">Wildlife Law</option>
+        <option value="youth">Youth Law</option>
+        <option value="aboriginal">Aboriginal Law</option>
+        <option value="biotechnology">Biotechnology Law</option>
+        <option value="construction">Construction Law</option>
+        <option value="disability">Disability Law</option>
+        <option value="animal">Animal Law</option>
+        <option value="bankruptcy">Bankruptcy Law</option>
+        <option value="charity">Charity Law</option>
+        <option value="civilrights">Civil Rights Law</option>
+        <option value="competition">Competition Law</option>
+        <option value="energy">Energy Law</option>
+        <option value="forensic">Forensic Law</option>
+        <option value="gaming">Gaming Law</option>
+        <option value="humanrights">Human Rights Law</option>
+        <option value="military">Military Law</option>
+        <option value="privacy">Privacy Law</option>
+        <option value="railway">Railway Law</option>
+        <option value="refugee">Refugee Law</option>
+        <option value="religious">Religious Law</option>
+        <option value="socialsecurity">Social Security Law</option>
+        <option value="transportation">Transportation Law</option>
+        <option value="veteran">Veteran's Law</option>
+    </select>
+</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <div class="select-wrapper">
+    <select id="language" class="form-control">
+        <option value="">Preferred language</option>
+        <option value="hindi">Hindi</option>
+        <option value="english">English</option>
+        <option value="tamil">Tamil</option>
+        <option value="telugu">Telugu</option>
+        <option value="bengali">Bengali</option>
+        <option value="marathi">Marathi</option>
+        <option value="gujarati">Gujarati</option>
+        <option value="kannada">Kannada</option>
+        <option value="malayalam">Malayalam</option>
+        <option value="punjabi">Punjabi</option>
+        <option value="oriya">Oriya</option>
+        <option value="assamese">Assamese</option>
+        <option value="urdu">Urdu</option>
+        <option value="sanskrit">Sanskrit</option>
+        <option value="nepali">Nepali</option>
+        <option value="sinhala">Sinhala</option>
+        <option value="french">French</option>
+        <option value="spanish">Spanish</option>
+        <option value="german">German</option>
+        <option value="chinese">Chinese</option>
+        <option value="japanese">Japanese</option>
+        <option value="russian">Russian</option>
+        <option value="arabic">Arabic</option>
+        <option value="portuguese">Portuguese</option>
+        <option value="italian">Italian</option>
+        <option value="dutch">Dutch</option>
+        <option value="swedish">Swedish</option>
+        <option value="danish">Danish</option>
+        <option value="norwegian">Norwegian</option>
+        <option value="finnish">Finnish</option>
+        <option value="polish">Polish</option>
+        <option value="turkish">Turkish</option>
+        <option value="greek">Greek</option>
+        <option value="hebrew">Hebrew</option>
+        <option value="vietnamese">Vietnamese</option>
+        <option value="thai">Thai</option>
+        <option value="indonesian">Indonesian</option>
+        <option value="malay">Malay</option>
+        <option value="swahili">Swahili</option>
+        <option value="filipino">Filipino</option>
+        <option value="hungarian">Hungarian</option>
+        <option value="romanian">Romanian</option>
+        <option value="czech">Czech</option>
+        <option value="ukrainian">Ukrainian</option>
+        <option value="croatian">Croatian</option>
+        <option value="serbian">Serbian</option>
+        <option value="slovak">Slovak</option>
+        <option value="bulgarian">Bulgarian</option>
+        <option value="lithuanian">Lithuanian</option>
+        <option value="latvian">Latvian</option>
+        <option value="estonian">Estonian</option>
+        <option value="slovenian">Slovenian</option>
+        <option value="macedonian">Macedonian</option>
+        <option value="albanian">Albanian</option>
+        <option value="belarusian">Belarusian</option>
+        <option value="icelandic">Icelandic</option>
+        <option value="irish">Irish</option>
+        <option value="scottish-gaelic">Scottish Gaelic</option>
+        <option value="welsh">Welsh</option>
+        <option value="catalan">Catalan</option>
+        <option value="basque">Basque</option>
+        <option value="galician">Galician</option>
+    </select>
+</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i> Search Lawyers
+                    </button>
+                </form>
+                <div class="search-results" id="searchResults">
+                    <div class="results-header">
+                        <h3>Recommended Lawyers</h3>
+                        <span class="results-count" id="resultsCount">0 lawyers found</span>
+                    </div>
+                    <div class="lawyers-grid" id="lawyersGrid">
+                        <!-- Lawyers will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Case Analyzer Section -->
+    <section class="case-analyzer-section" id="case-analyzer">
+        <div class="container">
+            <div class="section-title">
+                <h2>AI Case Analyzer</h2>
+                <p>Get insights into your legal situation based on similar past cases from Indian courts</p>
+            </div>
+            <div class="chatbot-container">
+                <div class="chatbot-header">
+                    <div class="chatbot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>JusticeAI</h3>
+                    <div class="chatbot-status">
+                        <span class="status-indicator"></span>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="chatbot-body" id="chatbotBody">
+                    <div class="chat-message bot-message">
+                        Hello! I'm JusticeAI, your legal assistant. I can analyze your case based on similar past judgments in Indian courts. I've reviewed over 50,000 cases from Supreme Court and High Courts across India. How can I help you today?
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+                <div class="chatbot-input">
+                    <input type="text" id="chatInput" placeholder="Describe your legal issue (e.g., property dispute, divorce, contract violation)...">
+                    <button class="send-btn" id="sendMessageBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Library Section -->
+    <section class="library-section" id="library">
+        <div class="container">
+            <div class="library-container">
+                <div class="library-header">
+                    <h2>Legal Education Library</h2>
+                    <p>Comprehensive resources on Indian laws, constitution, and landmark judgments</p>
+                </div>
+                <div class="library-search">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="librarySearch" placeholder="Search laws, articles, punishments (e.g., IPC 302, Article 21)...">
+                    </div>
+                </div>
+                <div class="library-categories">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="constitution">Constitution</button>
+                    <button class="category-btn" data-category="criminal">Criminal Law</button>
+                    <button class="category-btn" data-category="civil">Civil Law</button>
+                    <button class="category-btn" data-category="property">Property Law</button>
+                    <button class="category-btn" data-category="family">Family Law</button>
+                    <button class="category-btn" data-category="cyber">Cyber Law</button>
+                </div>
+                <div class="library-content">
+                    <div class="library-sidebar">
+                        <div class="sidebar-section">
+                            <h4><i class="fas fa-bookmark"></i> Constitution</h4>
+                            <ul class="sidebar-menu">
+                                <li><a href="#" data-filter="fundamental-rights"><i class="fas fa-chevron-right"></i> Fundamental Rights</a></li>
+                                <li><a href="#" data-filter="directive-principles"><i class="fas fa-chevron-right"></i> Directive Principles</a></li>
+                                <li><a href="#" data-filter="fundamental-duties"><i class="fas fa-chevron-right"></i> Fundamental Duties</a></li>
+                                <li><a href="#" data-filter="amendments"><i class="fas fa-chevron-right"></i> Amendments</a></li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-section">
+                            <h4><i class="fas fa-gavel"></i> Criminal Laws</h4>
+                            <ul class="sidebar-menu">
+                                <li><a href="#" data-filter="ipc"><i class="fas fa-chevron-right"></i> IPC Sections</a></li>
+                                <li><a href="#" data-filter="crpc"><i class="fas fa-chevron-right"></i> CrPC</a></li>
+                                <li><a href="#" data-filter="evidence-act"><i class="fas fa-chevron-right"></i> Evidence Act</a></li>
+                                <li><a href="#" data-filter="bail-provisions"><i class="fas fa-chevron-right"></i> Bail Provisions</a></li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-section">
+                            <h4><i class="fas fa-landmark"></i> Landmark Judgments</h4>
+                            <ul class="sidebar-menu">
+                                <li><a href="#" data-filter="supreme-court"><i class="fas fa-chevron-right"></i> Supreme Court</a></li>
+                                <li><a href="#" data-filter="high-courts"><i class="fas fa-chevron-right"></i> High Courts</a></li>
+                                <li><a href="#" data-filter="recent-rulings"><i class="fas fa-chevron-right"></i> Recent Rulings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="library-main">
+                        <div class="documents-grid" id="documentsGrid">
+                            <!-- Documents will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Users Say</h2>
+                <p>Hear from people who have transformed their legal journey with JusticeHub</p>
+            </div>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        "JusticeHub's AI analyzer helped me understand the strengths and weaknesses of my property case. The predictions were remarkably accurate and helped me prepare better for court proceedings. Found the perfect lawyer through their platform who resolved my 5-year dispute in just 8 months!"
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Rahul Sharma" class="author-avatar">
+                        <div class="author-info">
+                            <h5>Rahul Sharma</h5>
+                            <p>Property Dispute Resolution, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="container">
+            <div class="cta-container">
+                <h2>Ready to Transform Your Legal Experience?</h2>
+                <p>Join thousands of Indians who are accessing justice smarter and faster with JusticeHub</p>
+                <button class="cta-btn" id="ctaButton">
+                    Get Started Today <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>JusticeHub</h3>
+                    <p>Democratizing access to legal resources and justice through innovative technology solutions.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
